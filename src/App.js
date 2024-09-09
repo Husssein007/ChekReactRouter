@@ -1,25 +1,67 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import AddMovie from './Component/AddMovie';
+import MovieList from './Component/MovieList';
+import SearchMovie from './Component/SearchMovie';
+import {moviesData} from './MovieData'
+import Navbar from './Component/Navbar';
+import './App.css'
+import HomePage from './Component/HomePage';
+import Trailer from './Component/Trailer';
+//  react routerr
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import {Routes,Route} from 'react-router-dom'
+import Movie from './Component/Movie';
+
+
+
+
+const App = () => {
+const [movieList,setMovieList]=useState(moviesData);
+
+  //ici partie rating : 
+const [nameSearch,setNAmeSearch]=useState('');
+
+  const deletovie=(ID)=>{
+    setMovieList(
+      movieList.filter((e)=> e.id !== ID )
+    )
+  }
+  const MovieSeen=(ID)=>{
+setMovieList(
+  movieList.map((e)=> e.id === ID ? {...e,isDone : !e.isDone} : e)
+)
+  }
+  //part add movie 
+  const Addmoviehandeler=(newMovie)=>{
+setMovieList(
+  [...movieList,newMovie]
+)
+  } 
+   return (
+    <Routes>
+   
+       
+    <Route path='/movie' element={<Movie    deletovie={deletovie} nameSearch={nameSearch}
+    setNAmeSearch={setNAmeSearch} movieList={movieList} MovieSeen={MovieSeen}
+    
+    />} />
+
+      <Route path='/add' element={<AddMovie  
+       Addmoviehandeler={Addmoviehandeler}/>  } />
+      
+ 
+<Route path='/' element={  <HomePage/>  } />
+
+<Route path='/trailer/:id' element={
+<Trailer/> } />
+
+
+
+
+
+    
+    </Routes>
+  )
 }
 
-export default App;
+export default App
